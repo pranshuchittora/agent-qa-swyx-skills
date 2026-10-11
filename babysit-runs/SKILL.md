@@ -42,6 +42,18 @@ Apply the allowance across all runners sharing the same constrained resource, ra
 
 Identify the current bottleneck, commonly LLM calls or data transfer. Adjust parallelism using comparable accepted throughput, latency, retries, throttling and resource pressure. Downshift when useful performance degrades and recover capacity when healthy. Increase capacity at the demonstrated bottleneck; active-call count alone is not success.
 
+## Close the supervision loop
+
+Notify promptly when an unfinished run stops making progress because all workers have stopped or eligible independent work is blocked. Report the cause, retained results and next recovery action even when no user action is needed; do not wait for the routine reporting interval.
+
+Each wakeup must advance a concrete ready step or record the actual dependency, persisted cooldown or service wait and its next check time. Status inspection and rewriting continuation notes alone are not recovery. Follow through on completed asynchronous prerequisites, including release checks, so ready work resumes without waiting for the user to notice.
+
+When the existing runner lacks the recovery behavior needed to finish, repair it within the authorized scope and resource limits, using safe execution boundaries and required validation/release gates. Keep persistent retries, delivery reconciliation and failure isolation in the repository implementation; this skill makes the supervisor responsible for identifying and repairing those gaps, not for inventing a replacement runner or bypassing safeguards.
+
+Verify recovery by observing useful work resume: a previously blocked eligible stage advances or produces a valid retained result, and independent work can continue while affected items remain isolated. A patch, passing tests, merge or restarted process alone does not establish recovery. If work does not advance, continue diagnosis and report the remaining blocker accurately.
+
+“Stay quiet when unchanged” applies to healthy execution or a previously explained dependency wait whose next check is scheduled. It does not justify leaving an unattended stall unreported. Avoid repeating unchanged alerts; report a new cause, missed recovery deadline, material forecast change or restored progress.
+
 ## Recover without losing successful work
 
 Each check compares accepted/remaining counts, active/queued stages, oldest work, ownership, recent logs, deliveries and retry state with the previous observation. Quiet logs alone do not establish a stall; use representative durations and other progress signals.
@@ -50,8 +62,12 @@ Isolate failed items or surfaces while independent work continues. Before replac
 
 - **Established intermittent failure:** recover automatically with bounded backoff and jitter. A status code alone does not establish quota exhaustion or permanent denial.
 - **Explicit authentication, entitlement or quota failure:** isolate the affected surface and use normal authorized recovery. If external action is needed, report the concrete requirement.
-- **Unknown delivery:** inspect retained output, request IDs and available provider status/idempotency before resubmission. Preserve attempt history; missing local output does not establish that no result was produced.
+- **Unknown delivery:** a client timeout is not the provider's final outcome. Check retained output, request IDs and provider status. If the API cannot show the result, use the authorized authenticated dashboard through Chrome/Computer. An API permission error does not rule out dashboard access. Preserve attempt history; missing local output or an early empty provider log does not prove failure.
 - **Runner or content defect:** fix the demonstrated cause and resume unfinished work, rather than regenerate accepted results.
+
+Close the uncertainty loop. If the provider may still be processing, persist the next check time based on its expected completion window and check again then. Recover successful output; follow up on pending work; investigate confirmed failures and retry within authorization and budget. If the outcome remains unresolved after bounded checks, report exactly what evidence or access is missing. Do not leave an item indefinitely marked unknown, and keep independent work moving.
+
+Retain the actual error and its cause, elapsed time and available request identifiers. Do not replace useful timeout or transport details with only a generic “delivery unknown” message. Distinguish the client's response state from the provider's completion state in reports.
 
 Use bounded immediate retries, followed by persisted cooldowns for periodic outages. Respect existing budgets. Wakeups must not reset retry history. When repeated recovery produces no useful progress, diagnose or pause the affected work and report evidence instead of maintaining a hot retry loop. Routine recoverable failures should not require another approval interruption.
 
