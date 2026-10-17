@@ -60,6 +60,7 @@ skill that handles one stage.
 
 | User intent | Start with | Hand off to |
 | --- | --- | --- |
+| Enrich a recorded conversation with source screenshots, demos, and annotations; review every rendered insertion | [annotated-video-production](./annotated-video-production) | Capture/download, thumbnail, and YouTube skills as each stage requires |
 | Download, transform, transcribe, thumbnail, or publish media end-to-end | [media-transform](./media-transform) | `download-*`, `transcribe-anything`, `thumbnail-extraction`, `youtube-*` |
 | Download a video from a page, X/Twitter, or Zoom | [download-video](./download-video), [download-x-video](./download-x-video), or [zoom-download](./zoom-download) | [media-transform](./media-transform) if more stages follow |
 | Upload many submitted talks from Airtable/local files to YouTube Studio | [youtube-studio-batch-upload](./youtube-studio-batch-upload) | [youtube-studio-computer-use](./youtube-studio-computer-use) for post-upload Studio cleanup |
