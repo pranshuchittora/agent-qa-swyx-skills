@@ -1,102 +1,82 @@
 ---
 name: annotated-video-production
-description: Produce or audit source-backed overlays for recorded conversations, podcasts, and panels, from cut selection and reference research through visual review, preview renders, full-video QA, and release packaging. Use when enriching existing footage with posts, screenshots, demos, or pull quotes; not for standalone motion graphics or transcript-only summaries.
+description: Plan, produce, resume, or audit editorial annotations for recorded conversations, including source screenshots, demos, and pull quotes. Routes the surrounding production cycle from cut selection to release; owns overlay decisions and review. Use for an annotated episode or its cue/asset review, not standalone download, transcription, thumbnail, upload, or motion-graphics tasks.
 ---
 
 # Annotated video production
 
-Make the conversation easier to follow and more rewarding to watch. Show the product, post, chart, or action being discussed. Do not turn a filmed conversation into a deck of paraphrases.
+Show what the conversation is about. This skill owns editorial annotation and its review cycle; neighboring skills own acquisition, transcription, rendering mechanics, packaging, and publication. Overlay guidance is developed here. Other stages are deliberately thin routes, to expand only when actual production work establishes new requirements.
 
-## Start from the current stage
+## Enter or resume at any stage
 
-Recover the chosen video, timebase, approved visual treatment, cue selections, asset manifest, latest render, and outstanding feedback. Continue from that state; do not restart research or design unnecessarily.
+Start with the user's requested outcome and existing artifacts. Do not force an episode through completed or irrelevant stages. Recover the current cut/timebase, selections, assets, approved treatment, latest output, and outstanding feedback. Ask only for missing information needed for the next action.
 
-- **Planning only:** research widely and make choices concrete; do not render the episode yet.
-- **Preview requested:** produce the requested interval, commonly the first ten minutes.
-- **Full render approved:** extend the approved treatment and quality, not merely its CSS or card template.
-- **Audit requested:** compare planned assets with what actually appears in the encoded video. Report every insertion; do not rerender unless requested or clearly authorized. “Don't rerender” stops rendering, not useful inspection.
-- **Publish requested:** follow the explicit channel and visibility scope. Thumbnail creation or render approval alone does not authorize public release.
+Keep a short stage record in the existing project notes or manifest, not a new workflow framework:
 
-Keep original footage and each review version intact. Store private footage, transcripts, captures, exports, and per-episode production notes in the project's ignored media area. The reusable skill library contains instructions, not episode exports or credentials.
+- Current stage and requested stopping point.
+- Paths to source cut, transcript, cue board, asset manifest, preview/final render, and release record, where they exist.
+- Decisions/approvals and unresolved items; next concrete action.
 
-## 1. Choose and understand the recording
+At a handoff, pass these artifacts and scope to the receiving skill, then record its result. If inputs change, revisit only affected work: a new cut invalidates cue timing; an asset replacement affects its layout/render/QA. Preserve original footage and review versions.
 
-When several edits exist, compare actual duration, opening, audio, camera coverage, continuity, and representative segments. Do not choose by filename, upload date, or resolution alone. Record which cut wins and why.
+## Routing and ownership
 
-Use the transcript to find topics, references, and likely insert points. Verify them against footage: transcript text does not establish speaker identity, visual timing, or camera position. Map names from verified introductions or supplied context, not anonymous ASR labels.
+Load only the skill needed for the current action. Resolve named skills from the installed catalog; inspect their current instructions rather than copying their mechanics here.
 
-Keep one canonical source timebase. If an edit changes timing, record the mapping before applying cues from another cut.
+| Stage / entry request | Owner and handoff |
+| --- | --- |
+| Acquire or compare cuts | `download-video` or source-specific downloader acquires media. Here, compare duration, opening, audio, continuity, and representative footage; record chosen cut and timebase. |
+| Transcript / editorial context | `transcribe-anything` for ASR; `podcast-publishing-assistant` for chapters and publishing copy. Use transcript to locate topics, then verify speaker and timing against footage. |
+| Research / select / capture overlays | This skill; produce selected cues and verified assets. |
+| Design / preview / full render | This skill owns treatment and acceptance. Retain the existing renderer; use `design-apps-with-imagegen` for requested exploration. Route custom HyperFrames composition work through `hyperframes`/`general-video` when that engine is appropriate. |
+| Audit existing annotated output | Enter directly at encoded-result review below; return findings without assuming a rerender. |
+| Titles / descriptions / thumbnails | `podcast-publishing-assistant` for copy; `latent-space-thumbnail-director` for LS artwork. Pass episode facts, series identity, chosen hooks, real-face references, and official brand assets. |
+| Upload / metadata / release | Relevant YouTube upload/API skill owns execution and account/channel verification. Pass exact output, metadata, channel, and authorized visibility. Record returned video ID and verified state. |
 
-## 2. Go wide on references; let the user cut
+`media-transform` owns platform-transfer and generic media pipelines. For an annotation-led episode, use this skill as the coordinator and call atomic skills directly; do not nest two orchestrators or repeat their checkpoints. Standalone adjacent requests go directly to their owner. Do not edit neighboring skills merely to route this one.
 
-Build a broad chronological candidate board across the whole conversation. Cover new topics and substantive long monologues, not just the opening. Frequency should feel reasonably even while leaving the conversation room to breathe; do not add filler to hit a quota.
+Stop at the requested deliverable. Planning does not start a render; preview approval does not imply publication. “Don't rerender” permits inspection but stops render work. Existing approval remains valid within its scope.
 
-Reference priority:
+## Research and select
 
-1. The guest's own post, demo, article, or project describing the same point.
-2. The exact primary product announcement, documentation, screenshot, chart, or media.
-3. A clearly relevant external explanation that makes the point visible.
-4. An intentional pull quote or simple explanatory diagram when that is genuinely the best treatment.
+Build a broad chronological board across the whole episode, with reasonably even coverage of new points and substantial monologues. Avoid filler quotas. Search the speaker's own posts, demos, and articles first; then exact primary sources; then useful external explanations. Use intentional pull quotes where the argument itself merits emphasis.
 
-For a long monologue or new argument, identify the speaker and search their own posts. When relevant to this user's workflow, use X `filter:follows`, their selected high-signal lists/list search, and Latent Space AINews at https://www.latent.space/s/ainews. Search existing guest posts before adding another generic reference.
+For this user's research, use X `filter:follows`, selected high-signal lists, and [Latent Space AINews](https://www.latent.space/s/ainews). Later references are acceptable: retain dates without repetitive chronology warnings.
 
-Later posts and updates are acceptable for this user's reference style. Keep dates available and avoid false chronology, but do not stamp every insert with a warning that it came later.
+Each candidate needs time, speaker/topic, source link, exact proposed visual, why it helps, and approximate hold. Let the user cut the broad board; import selection exports and preserve their edits. A URL alone is not a resolved visual.
 
-Present each candidate with timestamp, speaker/topic, source link, exact proposed visual, reason it helps, and expected hold. Import the user's selected-cue export and preserve deletions, additions, and edits. A link alone is not a resolved visual.
+## Capture the selected thing
 
-## 3. Resolve actual assets before building
+Read [capture-and-cues.md](references/capture-and-cues.md) when resolving assets or reconciling a cue manifest.
 
-Read [references/capture-and-cues.md](references/capture-and-cues.md) for capture checks and the cue record.
+Prefer original attached images and playable source media. Inspect the saved asset. A successful download, plausible filename, or attribution does not establish that the requested image/chart/demo is present. A photo-only post failing a video downloader still has a photo to recover. Check existing local originals before repeating research.
 
-Capture the relevant image or functioning demo, not just surrounding text. Download original attached media where available; otherwise capture the loaded source page. Use Chrome for authenticated sessions in this user's environment. Apply the installed resilient-computer-use recovery workflow if browser automation fails.
+Choose demo segments showing action/results, not intros, branding, or teasers. Scroll articles with pauses on useful passages. A still-image pan does not substitute for a functioning demo.
 
-**A failed capture is not permission to replace an image with prose.** A post can contain a photo but no video. A downloader's “no video” result does not establish that no visual exists. Inspect the attachment/photo viewer, obtain its media URL, save it, and visually inspect the result.
+After reasonable recovery attempts, omit unavailable inserts and report them; continue the rest. Escalate only an explicitly indispensable visual or a gap that prevents the requested outcome. Never silently replace a requested visual with prose.
 
-Watch for blank media areas, spinners, cookie dialogs, browser chrome, play buttons, and partial screenshots. Check the source asset itself, not just its filename or successful HTTP status. Separate “source found,” “asset captured,” “visually verified,” and “used in render.”
+## Frame for watchability
 
-Prefer actual playing source video for a demo. Choose the interval showing the useful action/result, not the opening logo, presenter introduction, or “coming up” teaser. For articles or long posts, use a deliberate scroll with pauses on the relevant passage. A still pan is a still pan, not a live product demonstration.
+Sample representative camera setups and use placement heuristics; avoid exhaustive tracking for mostly static footage.
 
-If the exact asset remains unavailable, keep the gap explicit in production notes and propose a useful replacement or omit the insertion. Do not silently substitute promotional copy.
+- Protect the active speaker's eyes/mouth. Listener faces, hands, and table space may be covered. Reposition or end an insert when camera cuts invalidate placement.
+- Make useful detail large enough to read, including square/tall assets. Use available side, lower, and upper space, or a cutaway/split view. Fit the card to the asset; crop irrelevant margins instead of white letterboxing or stretching.
+- Focus on the reason the asset was chosen. Highlights encompass complete words/lines with padding and track scrolling. A focused crop or subtle emphasis often beats a heavy rectangle.
+- Use concise source/author attribution and a readable URL/domain. Keep full links in the source record/description. Use LS branding without redundant oversized logos.
+- Use selective, accurate, naturally attributed pull quotes. Do not turn available photos, charts, or interfaces into generic title/body cards.
+- Keep research caveats internal. Avoid repeated “DISCUSSION SUMMARY,” “PRODUCT PAGE EXCERPT,” or “not a benchmark/private workspace” labels. If context matters, use a brief natural attribution/date or a better asset.
+- Use perceptible, restrained entrances/exits and requested sound cues. Listen under dialogue at normal volume; lack of clipping alone does not prove the sound works.
 
-## 4. Design for the conversation
+## Preview quickly, then extend
 
-Sample representative frames for mostly static camera setups and use simple speaker-aware placement rules. Do not spend excessive time on exhaustive tracking unless the footage warrants it.
+Default: render the first ten minutes (or requested interval) and provide a lightweight board of the remaining exact assets/compositions. Use stills or short low-resolution previews for later treatments when useful or requested; do not require another comprehensive motion-preview round.
 
-- Protect the active speaker's eyes and mouth. Covering listeners, hands, or the table is acceptable when it makes the insert readable. Reposition or end the insert at a cut that changes the safe region.
-- Make square and tall assets large enough to read. Use the side, lower area, and available upper space; do not squeeze everything into a shallow lower third.
-- Preserve natural aspect ratio. Fit the card to the asset, crop irrelevant margins, or use a cutaway/split composition. No letterboxed white padding or distorted images just to fill a fixed rectangle.
-- Preserve a readable whole source, then focus on the relevant detail. Crop or scroll intentionally. Highlight complete words/lines with padding; boxes must track the moving source and never cut through text. Prefer a focused crop or subtle emphasis when a box adds clutter.
-- Use brief, readable product/author attribution and a meaningful URL/domain. Put long tracking URLs and full source links in the description/production record. Avoid shrinking text until it technically fits.
-- Use the channel's existing fonts, palette, and logo. Do not repeat a large logo on every insert when the video already has one.
+Inspect the preview at playback and small-screen size; play its motion and audio. Apply feedback about framing, margins, emphasis, and timing throughout. Full-render approval extends the approved quality and variety, not permission to fill later sections with text fallbacks. Reconcile selected visuals with actual renderer inputs before rendering.
 
-Pull quotes are allowed and can be excellent. Use them for a memorable argument, in moderation, alongside real visuals. Preserve exact words when quoting, and attribute naturally. Do not replace charts, diagrams, product screenshots, or requested attached photos with generic title/body cards.
+## Review the encoded result
 
-**Keep production caveats out of the viewing experience.** Repetitive labels such as “PRODUCT PAGE EXCERPT,” “DISCUSSION SUMMARY,” “Not a measured benchmark,” and “Not the guest's private workspace” are not useful captions. Keep uncertainty and source relationships in the cue record. If a distinction matters to understanding, express it briefly and naturally (for example “Orchid ad” or a source/date); choose a better asset rather than attaching a disclaimer to a misleading one.
+For audits or completed renders, read [render-review.md](references/render-review.md). Inspect every insertion in the final encoded file; play moving inserts, transitions, and their audio. Sample untouched conversation rather than requiring continuous whole-episode playback.
 
-Use restrained but perceptible entrances/exits and a short sound cue when requested. Listen at normal playback volume under dialogue: audible without masking speech. Do not rely on lack of clipping as evidence that the sound works. Vary visual treatments by purpose rather than animating every card identically.
+Compare selected visual → captured source → rendered output. Repair systematic defects across affected cues when fixes are authorized. An audit-only request ends with findings. A production request ends when its requested output is verified, with omitted inserts reported. Additional creative alternatives are optional, not completion gates.
 
-## 5. Preview, critique, agree
-
-Create a review board with exact assets and representative in-frame compositions. For wider creative exploration, use the installed design/image-generation skills only for treatments, not to fabricate evidence or product screenshots.
-
-Render the requested preview interval. Inspect it at actual viewing size, including a small-screen view, and play the transitions, scrolling, source clips, and audio. Give a judgment: what works, what should be cut, and what needs repair. User feedback on scale, margins, face coverage, attribution, or style applies throughout the episode.
-
-Approval of a good ten-minute preview approves that quality and variety. It does not approve filling the remaining hour with text fallbacks. Reconcile the final cue plan against the selected assets before the full render.
-
-## 6. Audit the encoded result
-
-Read [references/render-review.md](references/render-review.md) for the acceptance pass and known failure cases.
-
-Review **every insertion in the final encoded file**, not only synthetic composite previews or a few attractive frames. For each cue, inspect its entrance/settled view, useful content, exit, and any camera cut while active. For moving media, play the interval to confirm the action, scroll, and reading time. Contact sheets help coverage but do not establish motion or audio quality.
-
-Compare three things: what the user selected, the captured source, and what was actually rendered. Report omissions/substitutions even when the output looks polished. Fix systematic defects in the treatment, then check all affected cues. Do not claim a complete audiovisual pass from still sampling.
-
-Return a per-cue keep/refine/replace/remove list with timestamps and evidence. A technical decode/audio-level check complements, but never replaces, editorial and visual review.
-
-## 7. Package and release within scope
-
-Deliver versioned video, source/cue manifest, review findings, and unresolved gaps. Verify duration, audio continuity, aspect ratio, playback, and output integrity before handing off.
-
-For this user's series, title/thumbnail identity comes first: e.g. `High Taste Testers: [episode hook]`. Offer distinct hooks around actual tools, spending, product judgment, or agent trust. Let selections teach the next round. Thumbnail variants should change idea/composition, not just palette. Use all requested real faces, official channel/event assets, and mobile/timestamp-safe framing. If asked for event branding, research its actual current logo and marketing artwork; typing the event name into an unrelated template is insufficient.
-
-Use the relevant installed YouTube skill for upload/metadata changes. Verify the active account and intended channel; do not infer it from a public channel page. Preserve authorized visibility and verify the uploaded ID and processing state. Never claim an existing YouTube video has been replaced by a local rerender. Do not change a live release merely because an audit found problems.
+Deliver versioned output, updated cue/stage record, and concise findings. Packaging preserves series identity first (for example `High Taste Testers: [hook]`); publication proceeds only within the user's authorized scope. A revised asset or local render is not a changed live upload.

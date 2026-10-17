@@ -1,4 +1,4 @@
 interface:
   display_name: "Annotated Video Production"
-  short_description: "Source-backed podcast overlays and full-render review"
-  default_prompt: "Use $annotated-video-production to plan, produce, or audit source-backed overlays for this recorded conversation, continuing from its current approval stage."
+  short_description: "Resume an annotated episode at any production stage"
+  default_prompt: "Use $annotated-video-production to resume this annotated episode at the requested stage, reuse existing decisions and artifacts, and route specialist work to its owning skill."
