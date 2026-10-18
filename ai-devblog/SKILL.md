@@ -201,7 +201,9 @@ DOM replay contains them. Prefer an isolated test environment and fresh test
 identity; inspect footage for private material, retain the run's provenance,
 and publish the video with the article using the established site workflow.
 Include native controls, a poster, descriptive text and a fallback link;
-verify playback and the deployed media response. A capture alone does not
+verify playback, seeking, and deployed byte-range responses. If the site's
+asset host cannot serve byte ranges, use an immutable, range-capable media
+source and retain the site asset as a download. A capture alone does not
 prove a frame rate, representative play or physical-device performance.
 
 Use a visual when it makes an important relationship easier to inspect or understand. Plan it around timing, topology, data movement, state or a comparison—not decoration. Tables and numbered text boxes are not substitutes for showing those relationships. Separate static explanation, interactive exploration and assessment; rejecting low-value controls is not a reason to omit a useful static diagram. Before
