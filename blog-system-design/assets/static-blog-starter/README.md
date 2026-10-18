@@ -11,15 +11,17 @@ SITE_URL=https://your-public-host.example pnpm build
 python3 -m http.server -d dist 8000
 ```
 
-Open `http://localhost:8000/blog/`. Without `SITE_URL`, metadata deliberately
+Open `http://localhost:8000/blog/` or `/changelog/`. Without `SITE_URL`, metadata deliberately
 uses `https://example.com` for local preview; set the actual HTTPS origin before
 publishing. Cards are generated as 1200×630 PNGs at build time with Sharp, and
 must be publicly served at the absolute URLs in the HTML. Check each card at
 chat-preview size and check the deployed response, not just the source metadata.
 
 Adapt this starter to the site's own shell and content model rather than
-replacing an established blog. `build.ts` has two sample posts and curated
-related links. `headings.ts` renders trusted Markdown and creates the heading
+replacing an established blog. `build.ts` has two sample posts, curated related links, and a small
+chronological changelog. Its release links and native details disclosures work
+without JavaScript; adapt the sample data and replace illustrative claims with
+evidence from the actual project. `headings.ts` renders trusted Markdown and creates the heading
 IDs shared by TOC and permalinks. Add `{#stable-id}` to preserve a published
 fragment across heading edits. `public/blog.js` implements rail, TOC and index
 search interactions; `public/blog.css` is an intentionally small skin. The

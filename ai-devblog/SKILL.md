@@ -1,6 +1,6 @@
 ---
 name: ai-devblog
-description: Turn coding, debugging, research, architecture, migration, deployment, or product work into a clear, evidence-backed technical post. Use for researching, writing, editing, or publishing technical articles; check the reading and sharing baseline and pair with blog-system-design when it needs work. Use ai-readme or a changelog for routine documentation and release facts.
+description: Turn coding, debugging, research, architecture, migration, deployment, or product work into a clear, evidence-backed technical post or substantive release narrative. Use for researching, writing, editing, or publishing technical articles or rich changelog entries; pair with blog-system-design for the reading and sharing system. Use ai-readme for routine onboarding documentation.
 ---
 
 # AI Devblog
@@ -34,7 +34,9 @@ copy edits do not require a site-wide audit.
 
 First decide whether a devblog is the right container:
 
-- Put a routine shipped fact in a changelog or release note.
+- Put a routine shipped fact in a changelog or release note. When the user
+  wants richer release notes, use `blog-system-design` for a linked changelog:
+  explain consequential changes and their evidence, with optional detail.
 - Put durable project onboarding, commands, API guidance, and contributor
   instructions in a README; use `ai-readme` when available.
 - Put an exhaustive roadmap, product plan, design specification, API reference,

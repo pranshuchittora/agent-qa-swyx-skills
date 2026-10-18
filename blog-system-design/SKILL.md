@@ -1,6 +1,6 @@
 ---
 name: blog-system-design
-description: Design, build, or revise a technical blog as a product system, including its index, navigation, heading links, search, responsive article layout, internal links, and social previews. Use when creating a publication, repairing a missing reading or sharing baseline, or changing shared blog presentation. Pair with ai-devblog for article writing.
+description: Design, build, or revise a technical blog and changelog as a product system, including its index, navigation, release history, heading links, search, responsive article layout, internal links, and social previews. Use when creating a publication, repairing a missing reading or sharing baseline, or changing shared blog presentation. Pair with ai-devblog for article writing.
 ---
 
 # Blog System Design
@@ -56,6 +56,25 @@ Provide the smallest useful hierarchy:
 
 Use one canonical post URL. Make filters shareable through query parameters.
 Do not create duplicate routes for visual variants of the same article.
+
+## Pair the devblog with a rich changelog
+
+Keep a dated, chronological release history with durable version fragments;
+link recent changes from the devblog index and related posts from the relevant
+releases. Link articles back to their release when that relationship is known.
+Keep each visible change understandable at a glance, then use native
+`details`/`summary` for useful explanation, screenshots, evidence, caveats, and
+links. Bold meaningful claims and use ordinary Markdown where appropriate.
+Do not make readers expand a disclosure to learn the essential change.
+
+Reconstruct claims from releases, source and verification records. An old entry
+describes what shipped then; label subsequent changes, models and unverified
+behavior rather than presenting them as current facts. Do not turn unfinished
+work into a release or expose private thread content. Give authors a simple,
+reusable content model, and ensure disclosures work with keyboard, touch and
+without JavaScript. Preserve existing release URLs, query behavior and metadata.
+The [static starter](assets/static-blog-starter/README.md) includes a working
+example; adapt it to the site's existing stack and content.
 
 ## Build intentional internal links
 
@@ -249,6 +268,8 @@ rendered system at representative widths such as 1600, 1280, 1024, 768, 430,
 - TOC anchors, active state, sticky/floating placement, restore control, and
   heading permalinks on hover, keyboard focus, and touch;
 - canonical and social metadata and publicly fetchable, correctly sized cards;
+- release links, version fragments, historical context and expandable details,
+  including keyboard, touch and no-JavaScript behavior;
 - contextual internal links and related-post lists, including reciprocal links
   where intended, missing targets, duplicates, self-links, and mobile density;
 - title wrapping, reading measure, code overflow, figures, tables, captions,

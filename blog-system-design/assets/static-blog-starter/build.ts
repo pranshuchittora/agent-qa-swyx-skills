@@ -1,6 +1,7 @@
 import { mkdir, writeFile, cp } from 'node:fs/promises';
 import { join } from 'node:path';
 import sharp from 'sharp';
+import { marked } from 'marked';
 import { escapeHtml as h, renderPost } from './headings.js';
 
 // Replace these examples with the site's existing content model. All content
@@ -8,8 +9,14 @@ import { escapeHtml as h, renderPost } from './headings.js';
 const site = 'Engineering notes';
 const origin = (process.env.SITE_URL || 'https://example.com').replace(/\/$/, '');
 const posts = [
-  { slug: 'finding-a-stutter', title: 'Finding a stutter', description: 'How one measurement changed our diagnosis.', date: '2026-01-02', related: ['measuring-a-frame'], body: 'A short example post. Replace it with your own evidence.\n\n## The visible symptom\n\nA frame occasionally took longer than expected.\n\n## A better measurement {#measurement}\n\nWe measured each stage separately.' },
-  { slug: 'measuring-a-frame', title: 'Measuring a frame', description: 'A practical starting point for timing an interactive app.', date: '2026-01-01', related: ['finding-a-stutter'], body: 'Start with the user-visible result.\n\n## The first clock\n\nA single average hides individual slow frames.\n\n## What to record\n\nKeep timestamps with the surrounding context.' }
+  { slug: 'finding-a-stutter', title: 'Finding a stutter', description: 'How one measurement changed our diagnosis.', date: '2026-01-02', release: 'v1.1', related: ['measuring-a-frame'], body: 'A short example post. Replace it with your own evidence.\n\n## The visible symptom\n\nA frame occasionally took longer than expected.\n\n## A better measurement {#measurement}\n\nWe measured each stage separately.' },
+  { slug: 'measuring-a-frame', title: 'Measuring a frame', description: 'A practical starting point for timing an interactive app.', date: '2026-01-01', release: 'v1.0', related: ['finding-a-stutter'], body: 'Start with the user-visible result.\n\n## The first clock\n\nA single average hides individual slow frames.\n\n## What to record\n\nKeep timestamps with the surrounding context.' }
+];
+// Keep the visible change useful on its own. Optional detail is trusted
+// Markdown and links to the story or evidence behind the release.
+const releases = [
+  { id: 'v1.1', date: '2026-01-02', title: 'Smoother motion', change: 'Frames now use more consistent timing.', summary: 'Why did the old motion stutter?', detail: 'A faster frame could still draw the same position twice. [Read the investigation](/blog/finding-a-stutter/#measurement).' },
+  { id: 'v1.0', date: '2026-01-01', title: 'First release', change: 'The first version is available.', summary: 'How did we measure it?', detail: 'Averages alone hide individual slow frames. [See the measurement notes](/blog/measuring-a-frame/#the-first-clock).' }
 ];
 const dist = 'dist';
 const url = (path: string) => new URL(path, origin).href;
@@ -17,7 +24,9 @@ const rendered = await Promise.all(posts.map(async post => ({ ...post, ...await 
 if (new Set(posts.map(p => p.slug)).size !== posts.length || posts.some(p => !/^[a-z0-9]+(?:-[a-z0-9]+)*$/.test(p.slug))) throw new Error('Invalid or duplicate slug');
 for (const post of rendered) {
   if (new Set(post.related).size !== post.related.length || post.related.some(id => id === post.slug || !posts.some(p => p.slug === id))) throw new Error(`Invalid related links for ${post.slug}`);
+  if (!releases.some(release => release.id === post.release)) throw new Error(`Unknown release for ${post.slug}`);
 }
+if (new Set(releases.map(release => release.id)).size !== releases.length) throw new Error('Duplicate release ID');
 await mkdir(join(dist, 'social'), { recursive: true });
 await cp('public', dist, { recursive: true });
 
@@ -38,7 +47,7 @@ async function card(slug: string, title: string) {
 }
 function page(title: string, description: string, path: string, image: string, body: string, type: 'article' | 'website') {
   const canonical = url(path); const imageUrl = url(`/social/${image}.png`); const fullTitle = title === site ? site : `${title} · ${site}`;
-  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${h(fullTitle)}</title><meta name="description" content="${h(description)}"><link rel="canonical" href="${h(canonical)}"><meta property="og:type" content="${type}"><meta property="og:title" content="${h(fullTitle)}"><meta property="og:description" content="${h(description)}"><meta property="og:url" content="${h(canonical)}"><meta property="og:image" content="${h(imageUrl)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${h(fullTitle)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${h(fullTitle)}"><meta name="twitter:description" content="${h(description)}"><meta name="twitter:image" content="${h(imageUrl)}"><meta name="twitter:image:alt" content="${h(fullTitle)}"><link rel="stylesheet" href="/blog.css"><script src="/blog.js" defer></script></head><body><header class="site-header"><a href="/blog/">${h(site)}</a></header><main class="page">${body}</main></body></html>`;
+  return `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${h(fullTitle)}</title><meta name="description" content="${h(description)}"><link rel="canonical" href="${h(canonical)}"><meta property="og:type" content="${type}"><meta property="og:title" content="${h(fullTitle)}"><meta property="og:description" content="${h(description)}"><meta property="og:url" content="${h(canonical)}"><meta property="og:image" content="${h(imageUrl)}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="${h(fullTitle)}"><meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${h(fullTitle)}"><meta name="twitter:description" content="${h(description)}"><meta name="twitter:image" content="${h(imageUrl)}"><meta name="twitter:image:alt" content="${h(fullTitle)}"><link rel="stylesheet" href="/blog.css"><script src="/blog.js" defer></script></head><body><header class="site-header"><a href="/blog/">${h(site)}</a><nav aria-label="Publication"><a href="/blog/">Blog</a> <a href="/changelog/">Changelog</a></nav></header><main class="page">${body}</main></body></html>`;
 }
 async function output(path: string, html: string) {
   const dir = join(dist, path); await mkdir(dir, { recursive: true }); await writeFile(join(dir, 'index.html'), html);
@@ -48,11 +57,15 @@ for (const post of rendered) {
   const rail = rendered.map(p => `<a href="/blog/${p.slug}/"${p.slug === post.slug ? ' aria-current="page"' : ''}>${h(p.title)}</a>`).join('');
   const toc = post.headings.filter(x => x.depth === 2 || x.depth === 3).map(x => `<li class="toc-level-${x.depth}"><a href="#${encodeURIComponent(x.id)}">${h(x.title)}</a></li>`).join('');
   const related = post.related.map(slug => { const p = rendered.find(x => x.slug === slug)!; return `<li><a href="/blog/${p.slug}/"><strong>${h(p.title)}</strong><span>${h(p.description)}</span></a></li>`; }).join('');
-  const body = `<div class="post-layout"><aside class="index-rail" aria-label="Blog index"><div class="rail-header"><a href="/blog/">All posts</a><button class="rail-toggle" type="button" aria-label="Minimize blog index">×</button></div><nav class="rail-links" aria-label="Posts">${rail}</nav><div class="rail-resize" role="separator" tabindex="0" aria-label="Resize blog index" aria-orientation="vertical" aria-valuemin="200" aria-valuemax="380" aria-valuenow="250"></div></aside><button class="rail-restore" type="button" aria-label="Restore blog index">☰</button><article class="post"><a class="post-back" href="/blog/">← All posts</a><header><h1>${h(post.title)}</h1><p>${h(post.description)}</p><p><time datetime="${post.date}">${post.date}</time> · ${post.minutes} min read</p></header><div class="article">${post.html}${related ? `<section class="related" aria-labelledby="related-reading"><h2 id="related-reading">Related reading<a class="heading-link" href="#related-reading" aria-label="Link to Related reading">#</a></h2><ul>${related}</ul></section>` : ''}</div></article>${toc ? `<aside class="toc" aria-label="On this page"><details><summary>On this page</summary><nav aria-label="Article sections"><ol>${toc}</ol></nav></details></aside>` : ''}</div>`;
+  const body = `<div class="post-layout"><aside class="index-rail" aria-label="Blog index"><div class="rail-header"><a href="/blog/">All posts</a><button class="rail-toggle" type="button" aria-label="Minimize blog index">×</button></div><nav class="rail-links" aria-label="Posts">${rail}</nav><div class="rail-resize" role="separator" tabindex="0" aria-label="Resize blog index" aria-orientation="vertical" aria-valuemin="200" aria-valuemax="380" aria-valuenow="250"></div></aside><button class="rail-restore" type="button" aria-label="Restore blog index">☰</button><article class="post"><a class="post-back" href="/blog/">← All posts</a><header><h1>${h(post.title)}</h1><p>${h(post.description)}</p><p><time datetime="${post.date}">${post.date}</time> · <a href="/changelog/#${h(post.release)}">${h(post.release)}</a> · ${post.minutes} min read</p></header><div class="article">${post.html}${related ? `<section class="related" aria-labelledby="related-reading"><h2 id="related-reading">Related reading<a class="heading-link" href="#related-reading" aria-label="Link to Related reading">#</a></h2><ul>${related}</ul></section>` : ''}</div></article>${toc ? `<aside class="toc" aria-label="On this page"><details><summary>On this page</summary><nav aria-label="Article sections"><ol>${toc}</ol></nav></details></aside>` : ''}</div>`;
   await output(`blog/${post.slug}`, page(post.title, post.description, `/blog/${post.slug}/`, post.slug, body, 'article'));
 }
 await card('index', 'Engineering notes');
 const rows = rendered.map(p => `<a class="post-row" href="/blog/${p.slug}/" data-search="${h(`${p.title} ${p.description} ${p.text}`.toLowerCase())}"><small>${p.date} · ${p.minutes} min read</small><h2>${h(p.title)}</h2><p>${h(p.description)}</p></a>`).join('');
-const index = `<h1>${h(site)}</h1><p>Notes on building things.</p><form class="blog-search" role="search" hidden><label for="blog-search">Search posts</label><div><input id="blog-search" type="search" autocomplete="off"><kbd>/</kbd><button type="reset">Clear</button></div><p class="search-count" role="status"></p></form><section class="listing" aria-label="Posts">${rows}</section><p class="search-empty" hidden>No matching posts. Try another search.</p>`;
+const recent = releases.slice(0, 3).map(r => `<li><a href="/changelog/#${h(r.id)}">${h(r.id)} · ${h(r.title)}</a></li>`).join('');
+const index = `<h1>${h(site)}</h1><p>Notes on building things.</p><section class="recent-releases"><h2>Latest changes</h2><ol>${recent}</ol><a href="/changelog/">All releases →</a></section><form class="blog-search" role="search" hidden><label for="blog-search">Search posts</label><div><input id="blog-search" type="search" autocomplete="off"><kbd>/</kbd><button type="reset">Clear</button></div><p class="search-count" role="status"></p></form><section class="listing" aria-label="Posts">${rows}</section><p class="search-empty" hidden>No matching posts. Try another search.</p>`;
 await output('blog', page(site, 'Notes on building things.', '/blog/', 'index', index, 'website'));
+await card('changelog', 'Changelog');
+const history = releases.map(r => `<article class="release" id="${h(r.id)}"><p>${h(r.date)} · <a href="#${h(r.id)}">${h(r.id)}</a></p><h2>${h(r.title)}</h2><p>${h(r.change)}</p><details><summary>${h(r.summary)}</summary>${marked.parse(r.detail, { async: false })}</details></article>`).join('');
+await output('changelog', page('Changelog', 'Release history and the stories behind it.', '/changelog/', 'changelog', `<h1>Changelog</h1><p>What changed and why it matters.</p>${history}<p><a href="/blog/">Read the dev blog →</a></p>`, 'website'));
 console.log(`Built ${posts.length} posts at ${origin}; example.com is for local preview only.`);
