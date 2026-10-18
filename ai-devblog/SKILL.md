@@ -194,6 +194,16 @@ angle. Give readers prerequisites, expected results, and safe cleanup when
 reproducibility is part of the value. Never dump a full transcript or
 implementation inventory into the story merely because it exists.
 
+When the user wants original video, look for the project's existing capture
+and publishing workflow and run it autonomously within the authorized scope.
+For games or canvas content, capture rendered pixels rather than assuming a
+DOM replay contains them. Prefer an isolated test environment and fresh test
+identity; inspect footage for private material, retain the run's provenance,
+and publish the video with the article using the established site workflow.
+Include native controls, a poster, descriptive text and a fallback link;
+verify playback and the deployed media response. A capture alone does not
+prove a frame rate, representative play or physical-device performance.
+
 Use a visual when it makes an important relationship easier to inspect or understand. Plan it around timing, topology, data movement, state or a comparison—not decoration. Tables and numbered text boxes are not substitutes for showing those relationships. Separate static explanation, interactive exploration and assessment; rejecting low-value controls is not a reason to omit a useful static diagram. Before
 producing or reviewing article visuals, read
 [the visual-language reference](references/visual-language.md). Generated
