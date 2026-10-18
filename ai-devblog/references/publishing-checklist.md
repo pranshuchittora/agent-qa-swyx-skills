@@ -12,8 +12,9 @@ content model, build, deployment, authorship, and visibility conventions.
 - Use the existing human-editable format and metadata schema. Do not introduce
   a new blog framework, author persona, or shared presentation convention for
   one article.
-- Use `blog-system-design` when shared navigation, index, taxonomy, typography,
-  search, article chrome, responsive behavior, or reusable components change.
+- Check the existing navigation and social-preview baseline before publishing a
+  new or substantially revised post; use `blog-system-design` when it is
+  missing or shared presentation needs to change.
 
 ## Build and preview
 
@@ -23,7 +24,8 @@ content model, build, deployment, authorship, and visibility conventions.
 4. Inspect desktop and mobile. Also inspect tablet or ultrawide when shared
    layout or unusually wide interactive content changed.
 5. Check title, deck, byline, description, date, tags, visibility, canonical
-   URL, social card, citations, and navigation.
+   URL, citations, heading links, and index/TOC. For public pages, check a
+   publicly fetchable social image and its metadata; inspect it at preview size.
 6. Check code wrapping, tables, asides, long links, captions, footnotes,
    interactive fallbacks, and narrow-screen overflow.
 

@@ -1,6 +1,6 @@
 ---
 name: ai-devblog
-description: Turn coding, debugging, research, architecture, migration, deployment, or product work into a clear, evidence-backed technical post in an existing publishing system. Use when an agent should reconstruct primary evidence, decide whether the material deserves a note or article, align on the intended reader, choose among field-report, explainer, reversal, origin-story, hands-on, or evidence-led argument forms, write and edit the piece, inspect its rendered presentation, and publish it at the requested visibility. Pair with blog-system-design for changes to the shared blog system.
+description: Turn coding, debugging, research, architecture, migration, deployment, or product work into a clear, evidence-backed technical post. Use for researching, writing, editing, or publishing technical articles; check the reading and sharing baseline and pair with blog-system-design when it needs work. Use ai-readme or a changelog for routine documentation and release facts.
 ---
 
 # AI Devblog
@@ -12,7 +12,7 @@ but make comprehension and human interest the organizing priorities.
 Use this order of attention:
 
 > route the genre → align with the reader → choose the angle → explain →
-> support with evidence → edit → cold-read → present → publish
+> support with evidence → edit → review → present → publish
 
 Apply `swyx-writing` as the shared voice and editing layer. For substantial
 public technical writing, read its
@@ -21,10 +21,14 @@ and [the story modes](references/story-modes.md) before proposing an angle.
 Apply `research-grounded-writing` when the post requires external research or
 source-backed claims.
 
-Use `blog-system-design` with this skill when the task changes the shared blog
-index, taxonomy, article shell, typography, navigation, search, responsive
-behavior, or reusable components. A post must not silently redesign its
-publication.
+Before publishing a new or substantially revised post, inspect the existing
+reading experience and social preview. Check for a desktop index rail, a
+section TOC, visible-on-hover/focus heading permalinks (visible on touch), and,
+for public pages, a working page-specific social card. If these basics
+are missing, use `blog-system-design` to implement the smallest coherent shared
+fix within the user's scope. Reuse an established system where it already
+satisfies the need; do not silently redesign a working publication. Routine
+copy edits do not require a site-wide audit.
 
 ## Route the material
 
@@ -73,21 +77,12 @@ a mechanism until it no longer makes sense.
 
 ## Align with the reader
 
-Before a standard or feature post, determine what the skill user expects the
-reader to **be**, **know**, and **want**. If this is not already explicit, ask
-one compact batch in the `align-me` shape:
-
-1. State each belief as a numbered decision.
-2. Give lettered, mutually exclusive choices with concrete consequences.
-3. Recommend one choice for each decision.
-4. End with `Reply approve all to accept 1A, 2B, 3A, or give changes such as
-   2C.` Then wait.
-
-Use [the reader-and-angle checkpoint](references/angle-review.md) for the exact
-questions. Default to a smart adjacent engineer who knows the domain but not
-the project and wants a useful mental model or decision. Do not ask what the
-user has already answered. For a short note with an obvious readership, state
-the inferred assumptions briefly and proceed.
+Determine what the reader is likely to **be**, **know**, and **want**, using
+the user's instructions and context. Default to a smart adjacent engineer who
+knows the domain but not the project and wants a useful model or decision.
+Proceed with reasonable assumptions; ask only when an unresolved choice would
+materially change the post or the user asks to choose. Use the
+[reader-and-angle reference](references/angle-review.md) when useful.
 
 Then write privately:
 
@@ -96,10 +91,9 @@ Then write privately:
 - **Spine:** the one question the post answers.
 - **Not this post:** two or three tempting facts that belong elsewhere.
 
-For a standard or feature post, offer two or three genuinely different angles
-unless only one honest angle exists. Keep each option compact: title, promise,
-and tradeoff. Recommend one and wait. Never hide a single thesis behind cosmetic
-title variants.
+Choose the strongest honest angle. If the user requests options or a material
+choice cannot be inferred, offer genuinely different angles with a title,
+promise, and tradeoff. Never hide a single thesis behind cosmetic title variants.
 
 ## Establish the evidence boundary
 
@@ -212,22 +206,10 @@ and interestingness gate. During the explanatory pass, check whether a central
 technical relationship remains buried in prose and whether each visual reveals
 it. Factual verification remains a separate evidence check.
 
-Then run a mandatory context-isolated cold read for every standard or feature
-post. Give a fresh subagent or uninvolved reader only the draft and public
-links—not the task thread, repository history, intended thesis, or angle notes.
-Ask:
-
-1. What is this about?
-2. What changed, or what is the author arguing?
-3. How does the central mechanism work?
-4. What evidence supports it?
-5. What remains uncertain?
-6. Which terms, transitions, or assumed facts block understanding?
-
-Compare the answers with the approved reader beliefs. If the cold reader misses
-the subject, thesis, mechanism, or evidence limit, revise and repeat. Fix the
-post; do not coach the reviewer. Use the same check in abbreviated form for a
-note when confusion risk is high.
+Read the draft for whether its subject, argument, mechanism, evidence, and
+limits are clear to the intended reader. An independent cold read can help for
+complex or easily misunderstood work when available or requested; it is not a
+prerequisite for an ordinary post.
 
 ## Protect readers and publish deliberately
 

@@ -1,6 +1,6 @@
 ---
 name: blog-system-design
-description: Design, build, or revise a technical blog as a product system. Use when work affects the blog index, category or section pages, article layout, typography, information density, internal linking, full-text search, keyboard shortcuts, resizable or collapsible navigation, table of contents, responsive breakpoints, reusable article components, media policy, accessibility, or blog-wide visual QA. Pair with ai-devblog when publishing individual technical articles; keep article writing in ai-devblog and shared presentation infrastructure here.
+description: Design, build, or revise a technical blog as a product system, including its index, navigation, heading links, search, responsive article layout, internal links, and social previews. Use when creating a publication, repairing a missing reading or sharing baseline, or changing shared blog presentation. Pair with ai-devblog for article writing.
 ---
 
 # Blog System Design
@@ -19,6 +19,11 @@ search behavior, or reusable component.
 One article must not silently redesign the blog. Audit the existing system
 first. Reuse a suitable established component; change the system deliberately
 when the existing pattern is inadequate.
+
+For a small static TypeScript blog with no suitable existing implementation,
+adapt the [runnable starter](assets/static-blog-starter/README.md): it includes the
+reading shell, search, stable anchors, related links and social-card generation.
+Use the existing site's stack and shell when they already meet the need.
 
 ## Audit before designing
 
@@ -130,6 +135,28 @@ Let readers minimize and restore it. Keep it sticky beside the article on wide
 screens and floating on narrower screens. Ensure transformed ancestors do not
 break fixed positioning.
 
+Give each article section a real fragment ID and a clickable permalink shown
+when its heading is hovered or the link receives keyboard focus; show it on
+touch devices without requiring hover. Keep it keyboard accessible and label it
+for screen readers. Generate TOC and permalinks from the same IDs; preserve
+published IDs, support explicit IDs for headings that may be renamed, reserve
+authored IDs before generating slugs, and reject duplicate explicit IDs.
+
+## Make social previews work
+
+Give each public post and relevant public landing page a suitable, distinct
+social card by default. Generate or select a 1200×630 PNG or JPEG, with readable
+article-specific title and meaningful imagery or typography. Keep a social
+card separate from any in-article hero; illustration is not evidence.
+
+Emit canonical and absolute `og:url`, `og:title`, `og:description`, `og:type`,
+`og:image`, image dimensions and alt text, plus Twitter `summary_large_image`
+and image metadata in the initial HTML. Check the deployed image is publicly
+fetchable without authentication, returns the correct image MIME type and
+dimensions, and looks right at chat-preview size. Audit other public pages when
+adding or repairing a shared card system. Existing platform caches may retain
+an older preview; distinguish a verified origin from a refreshed chat card.
+
 ## Favor compact technical typography
 
 Use a restrained publication such as the Cloudflare blog as inspiration:
@@ -195,11 +222,9 @@ low-information block above the fold. Prefer a compact treatment beside the
 opening, later in the article, or in the social card.
 
 Use an information-dense SVG diagram, chart, annotated screenshot, or other
-technical visual when the opening needs a hero. Generate a dedicated `og:image`
-for social previews when useful; do not assume it must also appear at full size
-inside the article. Do not generate decorative hero art unless the user
-explicitly requests it. Prefer no in-article image over a vibes image that does
-not explain, prove, or contextualize anything.
+technical visual when the opening needs a hero. Do not generate decorative hero
+art unless the user explicitly requests it. Prefer no in-article image over a
+vibes image that does not explain, prove, or contextualize anything.
 
 Use, in order of explanatory value:
 
@@ -221,7 +246,9 @@ rendered system at representative widths such as 1600, 1280, 1024, 768, 430,
   results, and browser back/forward;
 - rail resizing, minimum/maximum bounds, minimize/restore, and breakpoint
   hiding;
-- TOC anchors, active state, sticky/floating placement, and restore control;
+- TOC anchors, active state, sticky/floating placement, restore control, and
+  heading permalinks on hover, keyboard focus, and touch;
+- canonical and social metadata and publicly fetchable, correctly sized cards;
 - contextual internal links and related-post lists, including reciprocal links
   where intended, missing targets, duplicates, self-links, and mobile density;
 - title wrapping, reading measure, code overflow, figures, tables, captions,

@@ -1,0 +1,19 @@
+{
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "build": "tsx build.ts",
+    "test": "tsx --test headings.test.ts",
+    "typecheck": "tsc --noEmit"
+  },
+  "dependencies": {
+    "entities": "6.0.1",
+    "marked": "18.1.1",
+    "sharp": "0.34.5"
+  },
+  "devDependencies": {
+    "@types/node": "22.18.0",
+    "tsx": "4.20.6",
+    "typescript": "5.9.3"
+  }
+}
