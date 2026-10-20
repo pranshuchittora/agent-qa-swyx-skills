@@ -1,32 +1,14 @@
 ---
 name: latent-space-thumbnail-director
-description: "Create, revise, or review Latent Space and Forward Deployed Engineering YouTube thumbnails using saved brand resources, curiosity-led editorial preferences, cast and company coverage rules, timestamp-safe layout, and approved examples. Use for Latent Space or FDE episode thumbnails, not unrelated channels."
+description: Create, revise, or review Latent Space or Forward Deployed Engineering YouTube thumbnails. Use for episode thumbnail direction and artwork, not unrelated channels or general publishing.
 ---
 
 # Latent Space Thumbnail Director
 
-Direct and QA Latent Space and FDE thumbnails. Use `$imagegen` for raster generation or editing. When the user selects `$artifact-template-latent-space-fde-thumbnail`, use that template as the visual starting point and this skill as the learned editorial and production layer.
+Use `$imagegen` for raster artwork. Read [preferences](references/preferences.md); consult [resources](references/resource-index.md) for assets and [examples](references/example-index.md) for relevant approved work. Apply the FDE template only when that series is requested.
 
-## Load the relevant guidance
-
-- Read [references/preferences.md](references/preferences.md) for every creation, revision, or review.
-- Read [references/resource-index.md](references/resource-index.md) when locating logos, identity references, source pages, or font assets.
-- Read [references/example-index.md](references/example-index.md) when choosing an art direction, producing variants, or comparing a result with approved work.
-
-## Workflow
-
-1. Ground the episode from the user's brief and supplied sources. Extract specific tensions, decisions, consequences, or counterintuitive claims; do not invent episode facts.
-2. Choose one curiosity hook, normally two to six words. Use one headline and at most one supporting visual metaphor.
-3. Build an explicit coverage list before generation: every requested person exactly once, every participating company exactly once, and no unrequested host.
-4. Use the official Latent Space logo asset and supplied identity or company references. Do not recreate an unavailable identity or wordmark from memory.
-5. Generate a 16:9 master with one dominant idea, one hero region, and strong mobile hierarchy. Multiple directions must vary the hook and composition, not merely color.
-6. Inspect the result at full size and at approximately 320 x 180. Verify headline spelling, count people and companies, check facial fidelity, wardrobe separation, LS x FDE branding, and the bottom-right duration-overlay exclusion zone.
-7. Repair material defects before delivery. Export a high-resolution master and an upload-ready 1280 x 720 JPG.
-
-## Non-negotiables
-
-- Keep the bottom-right duration-overlay zone free of essential content. DAILY belongs before that zone, not at the extreme right edge.
-- Do not let several dark shirts merge into the near-black background. Relight or recolor clothing while preserving faces and identity.
-- Keep the official LS hex compact in the upper-right with `FDE`; prefer Tachyon only when an actual Tachyon font file is available.
-- Preserve complete guest and company coverage. A sparse composition is not permission to drop people or logos.
-- Avoid biographies, dates, paragraph copy, ornamental UI, screenshots, duplicate faces, and tiny badges unless the user specifically requests them.
+1. Ground ideas in the episode. Review several recent thumbnails on the target channel or series, and compare their composition, type, scale and imagery; distinguish observed patterns from a rigid template.
+2. Offer at least four distinct title-and-hook pairs in a table, recommend one, and briefly challenge each. Favor specific, thoughtful sentence-case hooks. Verify any claim, number, guest post, role or milestone. Honor existing choices instead of asking again.
+3. For the chosen hook, show distinct visual directions in context alongside recent channel examples, with their tradeoffs. A choice of title or words is not a choice of artwork: obtain visual selection before applying it unless the user explicitly asks you to choose. Independent packaging and private preparation can continue.
+4. Build for the episode: one clear idea and a meaningful visual, not generic decorative tech. Show each requested guest and company once, with no unrequested host. Prefer real photo or video-frame cutouts for faces; disclose generated likenesses and inspect fidelity. Use official brand assets, not recreated logos. FDE branding is for FDE episodes only.
+5. Inspect full size and at about 320 × 180, including against the channel grid. Check legibility, resemblance, headline, company and guest coverage, contrast, branding, and clearance for YouTube’s bottom-right duration badge. Repair defects; export a 16:9 master and 1280 × 720 JPG.
