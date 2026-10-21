@@ -214,6 +214,7 @@ narrowest atomic skill.
 
 #### Writing And Corpus Publishing
 
+- [tweet-writing](./tweet-writing) — drafts tweets and quote posts using peer examples, source material, and the account's voice.
 - [swyx-writing](./swyx-writing) — applies the shared nonfiction voice and three editing passes.
 - [research-grounded-writing](./research-grounded-writing) — produces finished nonfiction backed by primary sources.
 - [person-profile-writing](./person-profile-writing) — resolves identity and writes source-grounded biographies.
